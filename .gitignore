@@ -1,5 +1,6 @@
 # Created by https://www.gitignore.io
-
+*.swp
+*.swo
 ### OSX ###
 .DS_Store
 .AppleDouble
@@ -28,7 +29,7 @@ Temporary Items
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+*.swp
 # C extensions
 *.so
 
