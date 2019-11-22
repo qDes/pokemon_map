@@ -61,12 +61,30 @@ def show_pokemon(request, pokemon_id):
                     pokemon_entity.pokemon.title,
                     request.build_absolute_uri(pokemon_entity.pokemon.image.url))
 
-    pokemon = { 
+    pokemon_render = { 
+                "pokemon_id":pokemon.id,
                 "title_ru": pokemon.title,
                 "title_en": pokemon.title_en,
                 "title_jp": pokemon.title_jp,
-                "img_url": request.build_absolute_uri(pokemon_entity.pokemon.image.url),
+                "img_url": request.build_absolute_uri(pokemon.image.url),
                 "description": pokemon.description,
               }
+    if pokemon.next_evolution:
+        pokemon_render['next_evolution'] = {
+                    "title_ru": pokemon.next_evolution.title,
+                    "pokemon_id": pokemon.next_evolution.id,
+                    "img_url": request.build_absolute_uri(
+                        pokemon.next_evolution.image.url),
+                     }
+    try:
+        previous_pokemon = pokemon.previous.get()
+        pokemon_render['previous_evolution'] = {
+                    "title_ru": previous_pokemon.title,
+                    "pokemon_id": previous_pokemon.id,
+                    "img_url": request.build_absolute_uri(
+                        previous_pokemon.image.url),
+                }
+    except ObjectDoesNotExist:
+        pass
     return render(request, "pokemon.html", context={'map': folium_map._repr_html_(),
-                                                    'pokemon': pokemon})
+                                                    'pokemon': pokemon_render})
