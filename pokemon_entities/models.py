@@ -3,27 +3,28 @@ from django.db import models
 
 class Pokemon(models.Model):
     title = models.TextField(verbose_name="Название")
-    title_en = models.TextField(blank=True, null=True,
+    title_en = models.TextField(default='',
                                 verbose_name="Название EN")
-    title_jp = models.TextField(blank=True, null=True,
+    title_jp = models.TextField(default='',
                                 verbose_name="Название JP")
     image = models.ImageField(upload_to='pokemons',
                               verbose_name="Изображение")
-    description = models.TextField(blank=True, null=True,
+    description = models.TextField(default='',
                                    verbose_name="Описание")
-    next_evolution = models.ForeignKey('self', 
+    next_evolution = models.ForeignKey('self',
                                        on_delete=models.SET_NULL,
                                        related_name='previous',
                                        null=True,
-                                       blank=True, 
+                                       blank=True,
                                        verbose_name="Эволюция")
-    
+
     def __str__(self):
         return f"{self.title}"
 
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE,
+                                related_name="entity",
                                 verbose_name="Покемон")
     lat = models.FloatField(verbose_name="Широта")
     lon = models.FloatField(verbose_name="Долгота")
